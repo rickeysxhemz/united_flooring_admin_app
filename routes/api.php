@@ -18,9 +18,9 @@ Route::prefix('auth')->group(function () {
     //Public Routes
     Route::post('login', [AuthController::class, 'login']);
     Route::post('register', [AuthController::class, 'register']);
-    Route::group(['middleware' => ['auth:api', 'role:admin']], function () {
-        Route::get('logout', [AuthController::class, 'logout']);
-    });
+    // Route::group(['middleware' => ['auth:api', 'role:admin']], function () {
+    //     Route::get('logout', [AuthController::class, 'logout']);
+    // });
 });
 // Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //     return $request->user();

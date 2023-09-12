@@ -20,7 +20,7 @@ class AuthService extends BaseService
         try {
             DB::beginTransaction();
             
-            // $userexist = User::where('email', $request->email)->first();
+            $userexist = User::where('email', $request->email)->first();
             // // dd($userexist);
             // if($userexist &&  $userexist->phone_verified_at == null){
                
@@ -101,7 +101,11 @@ class AuthService extends BaseService
             //     DB::commit();
             //     return $user;
             // }
-            
+          
+              if($userexist){
+                return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS['outcomeCode'], ['The email has already been taken.']);
+            }
+
             // if($userexist &&  $userexist->phone_verified_at !== null){
             //     return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS['outcomeCode'], ['The email has already been taken.']);
             // }
@@ -174,16 +178,16 @@ class AuthService extends BaseService
 
     public function login($request)
     {
-        try {
+        // try {
+         
             $credentials = $request->only('email', 'password');
 
             $user = User::whereHas('roles', function ($q) {
-                $q->where('name', 'user');
+                $q->where('name', 'admin');
             })
                 ->where('email', '=', $credentials['email'])
-                ->with('setting', 'FavouriteArtist')
                 ->first();
-            if(isset($user->phone_verified_at) && $user->phone_verified_at !== null){
+            // if(isset($user->phone_verified_at) && $user->phone_verified_at !== null){
                 if (
                     Hash::check($credentials['password'], isset($user->password) ? $user->password : null)
                     &&
@@ -200,18 +204,18 @@ class AuthService extends BaseService
                         'expires_in' => $this->guard()->factory()->getTTL() * 60,
                         'user' => Auth::user()->only('id', 'username', 'email', 'phone_no', 'address', 'experience', 'cv_url', 'image_url', 'total_balance', 'absolute_cv_url', 'absolute_image_url'),
                         'roles' => $roles,
-                        'settings' => Auth::user()->setting->only('user_id', 'private_account', 'secure_payment', 'sync_contact_no', 'app_notification', 'language')
+                        // 'settings' => Auth::user()->setting->only('user_id', 'private_account', 'secure_payment', 'sync_contact_no', 'app_notification', 'language')
                     ];
                     return Helper::returnRecord(GlobalApiResponseCodeBook::SUCCESS['outcomeCode'], $data);
                 }
                 return Helper::returnRecord(GlobalApiResponseCodeBook::INVALID_CREDENTIALS['outcomeCode'], []);
-            }
+            // }
             return Helper::returnRecord(GlobalApiResponseCodeBook::INVALID_CREDENTIALS['outcomeCode'], []);
-        } catch (Exception $e) {
-            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
-            Helper::errorLogs("AuthService: login", $error);
-            return false;
-        }
+        // } catch (Exception $e) {
+        //     $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+        //     Helper::errorLogs("AuthService: login", $error);
+        //     return false;
+        // }
     }
      /**
      * Get the guard to be used during authentication.

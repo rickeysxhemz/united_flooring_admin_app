@@ -25,7 +25,7 @@ class AuthController extends Controller
         if (!$register)
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User did not registered!", $register));
 
-        return ($this->global_api_response->success(1, "Artist registered successfully!", $register));
+        return ($this->global_api_response->success(1, "User registered successfully!", $register));
     }
 
     public function login(LoginRequest $request)
