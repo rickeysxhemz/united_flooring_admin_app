@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MessageController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -30,6 +33,26 @@ Route::prefix('auth')->group(function () {
     Route::group(['middleware' => ['auth:api', 'role:admin']], function () {
         Route::get('logout', [AuthController::class, 'logout']);
     });
+});
+Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], function () {
+    
+    Route::prefix('project')->group(function () {
+    Route::post('add', [ProjectController::class, 'addProject']);
+    Route::get('status-all',[ProjectController::class,'statusAll']);
+    Route::post('comment',[ProjectController::class,'comment']);
+    Route::post('get-comments',[ProjectController::class,'getComments']);
+    });
+    Route::prefix('category')->group(function () {
+        Route::post('add', [CategoryController::class, 'addCategory']);
+        
+    });
+    Route::prefix('message')->group(function () {
+        Route::post('send', [MessageController::class, 'sendMessage']);
+        Route::get('get-chats',[MessageController::class,'getChats']);
+        Route::post('get-messages',[MessageController::class,'getMessages']);
+        
+    });
+        
 });
 
 Route::any(

@@ -27,7 +27,8 @@ class AddPhoneToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropIfExists('phone_no');
+            $table->dropIfExists('phone_verified_at');
         });
     }
 }
