@@ -6,6 +6,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\SettingController;
+use App\Http\Controllers\DashboardController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,6 +38,11 @@ Route::prefix('auth')->group(function () {
 });
 Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], function () {
     
+    Route::prefix('dashboard')->group(function () {
+        Route::get('user-data',[DashboardController::class,'getUserData']);
+        Route::get('recent-projects',[DashboardController::class,'recentProjects']);
+        });
+
     Route::prefix('project')->group(function () {
     Route::post('add', [ProjectController::class, 'addProject']);
     Route::get('status-all',[ProjectController::class,'statusAll']);
@@ -51,6 +58,11 @@ Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], 
         Route::get('get-chats',[MessageController::class,'getChats']);
         Route::post('get-messages',[MessageController::class,'getMessages']);
         
+    });
+    Route::prefix('setting')->group(function () {
+        Route::post('edit-profile', [SettingController::class, 'editProfile']);
+        Route::post('change-password', [SettingController::class, 'changePassword']);
+        Route::post('profile-image', [SettingController::class, 'profileImage']);
     });
         
 });
