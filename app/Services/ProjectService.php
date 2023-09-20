@@ -27,6 +27,7 @@ class ProjectService extends BaseService
         if($user_exist){
             DB::beginTransaction();
             $project = new Project();
+            $project->admin_id = auth()->user()->id;
             $project->user_id = $user_exist->id;
             $project->name = $request->project_name;
             $project->priority = $request->priority;
@@ -65,6 +66,7 @@ class ProjectService extends BaseService
         $setting->save();
             
         $project = new Project();
+        $project->admin_id = auth()->user()->id;
         $project->user_id = $user->id;
         $project->name = $request->project_name;
         $project->priority = $request->priority;
