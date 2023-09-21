@@ -45,9 +45,11 @@ Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], 
 
     Route::prefix('project')->group(function () {
     Route::post('add', [ProjectController::class, 'addProject']);
+    Route::post('upload-images', [ProjectController::class, 'uploadImages']);
     Route::get('status-all',[ProjectController::class,'statusAll']);
     Route::post('comment',[ProjectController::class,'comment']);
     Route::post('get-comments',[ProjectController::class,'getComments']);
+    Route::post('info',[ProjectController::class,'info']);
     });
     Route::prefix('category')->group(function () {
         Route::post('add', [CategoryController::class, 'addCategory']);

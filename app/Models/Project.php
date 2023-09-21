@@ -16,4 +16,12 @@ class Project extends Model
     {
         return $this->belongsTo(User::class,'user_id','id');
     }
+    public function projectImages()
+    {
+        return $this->hasMany(ProjectImage::class,'project_id','id');
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class,'project_id','id');
+    }
 }

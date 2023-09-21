@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProjectRequest\CommentRequest;
 use App\Http\Requests\ProjectRequest\GetCommentRequest;
 use App\Http\Requests\ProjectRequest\AddProjectRequest;
-
+use App\Http\Requests\ProjectRequest\InfoRequest;
 class ProjectController extends Controller
 {
     public function __construct(ProjectService $ProjectService, GlobalApiResponse $GlobalApiResponse)
@@ -42,5 +42,19 @@ class ProjectController extends Controller
         if (!$get_comments)
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Comments did not fetched!", $get_comments));
         return ($this->global_api_response->success(1, "Comments fetched successfully!", $get_comments));
+    }
+    public function uploadImages(Request $request)
+    {
+        $upload_images = $this->project_service->uploadImages($request);
+        if (!$upload_images)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Images did not uploaded!", $upload_images));
+        return ($this->global_api_response->success(1, "Images uploaded successfully!", $upload_images));
+    }
+    public function info(InfoRequest $request)
+    {
+        $info = $this->project_service->info($request);
+        if (!$info)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Project Update Info did not fetched!", $info));
+        return ($this->global_api_response->success(1, "Product Update Info fetched successfully!", $info));
     }
 }
