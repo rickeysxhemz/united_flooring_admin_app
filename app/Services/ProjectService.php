@@ -14,6 +14,7 @@ use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Exception;
 use App\Helper\Helper;
+use App\Models\ProjectImage;
 
 class ProjectService extends BaseService
 {
@@ -151,6 +152,37 @@ class ProjectService extends BaseService
             DB::rollback();
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
             Helper::errorLogs("ProjectService: getComments", $error);
+            return false;
+        }
+    }
+    public function uploadImages($request)
+    {
+        try{
+            DB::beginTransaction();
+            $project_images=new ProjectImage;
+            $project_images->project_id=$request->project_id;
+            $project_images->image=Helper::storeImageUrl($request,null,'storage/projectImages');
+            $project_images->save();
+            DB::commit();
+            return $project_images;
+        }catch(Exception $e){
+            DB::rollback();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("ProjectService: uploadImages", $error);
+            return false;
+        }
+    }
+    public function info($request)
+    {
+        try{
+            $project=Project::with('ProjectCategories','user','projectImages','comments')
+            ->where('id',$request->project_id)
+            ->first();
+            return $project;
+        }catch(Exception $e){
+            DB::rollback();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("ProjectService: info", $error);
             return false;
         }
     }
