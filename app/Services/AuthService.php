@@ -46,8 +46,8 @@ class AuthService extends BaseService
                     
                     $otp = new OTP();
                     $otp->user_id = $user->id;
-                    $otp->otp_value = random_int(100000, 999999);
-                    // $otp->otp_value = '123456';
+                    // $otp->otp_value = random_int(100000, 999999);
+                    $otp->otp_value = '123456';
                     $otp->save();
                     
                     $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
@@ -61,7 +61,7 @@ class AuthService extends BaseService
                     //     'from' => $twilio_number]);
                     
                     $receiverNumber = $request->phone_no;
-                    $message = 'This message from Nails2u here is your six digit otp  ' . $otp->otp_value;
+                    $message = 'This message from united flooring here is your six digit otp  ' . $otp->otp_value;
                     $client = new Client($account_sid, $auth_token);
                     $client->messages->create($receiverNumber, [
                         'from' => $twilio_number, 
@@ -83,8 +83,8 @@ class AuthService extends BaseService
 
                 $otp = new OTP();
                 $otp->user_id = $user->id;
-                $otp->otp_value = random_int(100000, 999999);
-                // $otp->otp_value = '123456';
+                // $otp->otp_value = random_int(100000, 999999);
+                $otp->otp_value = '123456';
                 $otp->save();
                 
                 $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
@@ -98,7 +98,7 @@ class AuthService extends BaseService
                 //     'from' => $twilio_number]);
                 
                 $receiverNumber = $request->phone_no;
-                $message = 'This message from United Floor here is your six digit otp   ' . $otp->otp_value;
+                $message = 'This message from United Flooring here is your six digit otp   ' . $otp->otp_value;
                 $client = new Client($account_sid, $auth_token);
                 $client->messages->create($receiverNumber, [
                     'from' => $twilio_number, 
@@ -156,8 +156,8 @@ class AuthService extends BaseService
 
             $otp = new OTP();
             $otp->user_id = $user->id;
-            $otp->otp_value = random_int(100000, 999999);
-            // $otp->otp_value = '123456';
+            // $otp->otp_value = random_int(100000, 999999);
+            $otp->otp_value = '123456';
             $otp->save();
 
             $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
@@ -165,7 +165,7 @@ class AuthService extends BaseService
             $twilio_number = '+13158478569';
             
             $receiverNumber = $request->phone_no;
-            $message = 'This message from Nails2u here is your six digit otp  ' . $otp->otp_value;
+            $message = 'This message from united flooring here is your six digit otp  ' . $otp->otp_value;
             $client = new Client($account_sid, $auth_token);
             $client->messages->create($receiverNumber, [
                 'from' => $twilio_number, 
@@ -228,62 +228,62 @@ class AuthService extends BaseService
     {
         try {
             DB::beginTransaction();
-            if($request->has('email') && isset($request->email))
-            {
-                $password_reset_token = Str::random(140);
-                $password_reset = new PasswordReset();
-                $password_reset->email = $request->email;
-                $password_reset->token = $password_reset_token;
-                $password_reset->save();
+            // if($request->has('email') && isset($request->email))
+            // {
+            //     $password_reset_token = Str::random(140);
+            //     $password_reset = new PasswordReset();
+            //     $password_reset->email = $request->email;
+            //     $password_reset->token = $password_reset_token;
+            //     $password_reset->save();
 
-                $user = User::whereHas('roles', function ($q) {
-                                $q->where('name', 'user');
-                            })
-                            ->where('email', $request->email)
-                            ->first();
-                if($user) {
-                    $otp = new OTP();
-                    $otp->user_id = $user->id;
-                    $otp->otp_value = random_int(100000, 999999);
-                    $otp->save();
+            //     $user = User::whereHas('roles', function ($q) {
+            //                     $q->where('name', 'user');
+            //                 })
+            //                 ->where('email', $request->email)
+            //                 ->first();
+            //     if($user) {
+            //         $otp = new OTP();
+            //         $otp->user_id = $user->id;
+            //         $otp->otp_value = random_int(100000, 999999);
+            //         $otp->save();
     
-                    $mail_data = [
-                        "token" => $otp->otp_value,
-                        "email" => $request->email
-                    ];
-                    SendPasswordResetMail::dispatch($mail_data);
-                    $response = [
-                        "message" => "last 4 digits",
-                        "digit" => substr($user->phone_no,-4)
-                    ];
-                    DB::commit();
-                    return Helper::returnRecord(GlobalApiResponseCodeBook::SUCCESS['outcomeCode'], $response);
-                } else {
+            //         $mail_data = [
+            //             "token" => $otp->otp_value,
+            //             "email" => $request->email
+            //         ];
+            //         SendPasswordResetMail::dispatch($mail_data);
+            //         $response = [
+            //             "message" => "last 4 digits",
+            //             "digit" => substr($user->phone_no,-4)
+            //         ];
+            //         DB::commit();
+            //         return Helper::returnRecord(GlobalApiResponseCodeBook::SUCCESS['outcomeCode'], $response);
+            //     } else {
                     
-                    return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_NOT_EXISTS['outcomeCode'], ['invalid email!']);
-                    // $response = [
-                    //     "message" => "invalid email!"
-                    // ];
-                    // $artist_exist = User::whereHas('roles', function ($q) {
-                    //                     $q->where('name', 'artist');
-                    //                 })
-                    //                 ->where('email', $request->email)
-                    //                 ->first();
-                    // if($artist_exist) {
-                    //     $response = [
-                    //         "message" => "This email exist as artist"
-                    //     ];
-                    // } else {
-                    //     $response = [
-                    //         "message" => "invalid email!"
-                    //     ];
-                    // }
-                }
+            //         return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_NOT_EXISTS['outcomeCode'], ['invalid email!']);
+            //         // $response = [
+            //         //     "message" => "invalid email!"
+            //         // ];
+            //         // $artist_exist = User::whereHas('roles', function ($q) {
+            //         //                     $q->where('name', 'artist');
+            //         //                 })
+            //         //                 ->where('email', $request->email)
+            //         //                 ->first();
+            //         // if($artist_exist) {
+            //         //     $response = [
+            //         //         "message" => "This email exist as artist"
+            //         //     ];
+            //         // } else {
+            //         //     $response = [
+            //         //         "message" => "invalid email!"
+            //         //     ];
+            //         // }
+            //     }
 
                 
-            }
-            else
-            {
+            // }
+            // else
+            // {
                 $user = User::whereHas('roles', function ($q) {
                                 $q->where('name', 'admin');
                             })
@@ -294,8 +294,8 @@ class AuthService extends BaseService
                     
                     $otp = new OTP();
                     $otp->user_id = $user->id;
-                    $otp->otp_value = random_int(100000, 999999);
-                    // $otp->otp_value = '123456';
+                    // $otp->otp_value = random_int(100000, 999999);
+                    $otp->otp_value = '123456';
                     $otp->save();
         
                     $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
@@ -335,7 +335,7 @@ class AuthService extends BaseService
                     //         "message" => "invalid number!"
                     //     ];
                     // }    
-                }
+                // }
 
                 
             }
