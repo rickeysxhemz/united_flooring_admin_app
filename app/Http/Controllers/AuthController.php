@@ -53,10 +53,10 @@ class AuthController extends Controller
         $forgot_password = $this->auth_service->forgotPassword($request);
 
         if (!$forgot_password)
-            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Email for sending resetting password did not sent!", $forgot_password));
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Code for sending resetting password did not sent!", $forgot_password));
 
         if ($forgot_password['outcomeCode'] == GlobalApiResponseCodeBook::RECORD_NOT_EXISTS['outcomeCode']) {
-            return $this->global_api_response->error(GlobalApiResponseCodeBook::RECORD_NOT_EXISTS, "invalid email!", []);
+            return $this->global_api_response->error(GlobalApiResponseCodeBook::RECORD_NOT_EXISTS, "invalid Phone number!", []);
         }
         return ($this->global_api_response->success(1, "successfully!", $forgot_password['record']));
     }
