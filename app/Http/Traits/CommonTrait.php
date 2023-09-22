@@ -3,6 +3,9 @@
 namespace App\Http\Traits;
 
 use Illuminate\Support\Facades\DB;
+use Exception;
+use Pusher;
+use App\Helper\Helper;
 
 trait CommonTrait {
 
@@ -238,4 +241,25 @@ trait CommonTrait {
 
         return isset($_config[0][$item]) ? $_config[0][$item] : NULL;
     }
+    function pusher($trigger_user, $trigger_message, $data) 
+    {
+        try {
+            
+            $app_id         = '1675308';
+            $app_key        = 'ff1996e2e5ad3c299e52';
+            $app_secret     = 'fed2303c83fb50473c1c';
+            $app_cluster    = 'ap2';
+
+            $pusher = new Pusher\Pusher( $app_key, $app_secret, $app_id, array( 'cluster' => $app_cluster, 'useTLS' => true ) );
+
+            $pusher->trigger($trigger_user, $trigger_message, $data);
+            
+        }catch (Exception $e) {
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("CommonTrait: Pusher", $error);
+            return Helper::returnRecord(false, []);
+        }
+        
+    }
+
 }

@@ -9,19 +9,34 @@ use App\Helper\Helper;
 use App\Models\User;
 use Exception;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Traits\CommonTrait;
 
 class MessageService extends BaseService
 {
+    use CommonTrait;
     public function sendMessage($request)
     {
         try
         {
             DB::beginTransaction();
             $message = new Message();
-            $message->sender_id = $request->sender_id;
+            $message->sender_id = Auth::id();
             $message->receiver_id = $request->receiver_id;
             $message->message = $request->message;
             $message->save();
+            $user = User::find(Auth::id());
+                $title = 'new message';
+                $body = $user->name.' send a message';
+
+                $data = [
+                        'status' => 'chat', 
+                        'sender' =>  Auth::id(), 
+                        'receiver' => $request->receiver_id, 
+                        'message' => $request->message
+                    ];
+
+                $this->pusher($request->receiver_id, $title, $body, $data);
             DB::commit();
             return $message;
         }catch(Exception $e){

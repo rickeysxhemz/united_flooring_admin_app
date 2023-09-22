@@ -47,7 +47,7 @@ class AuthService extends BaseService
                     $otp = new OTP();
                     $otp->user_id = $user->id;
                     // $otp->otp_value = random_int(100000, 999999);
-                    $otp->otp_value = '123456';
+                    $otp->otp_value = '1234';
                     $otp->save();
                     
                     $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
@@ -84,7 +84,7 @@ class AuthService extends BaseService
                 $otp = new OTP();
                 $otp->user_id = $user->id;
                 // $otp->otp_value = random_int(100000, 999999);
-                $otp->otp_value = '123456';
+                $otp->otp_value = '1234';
                 $otp->save();
                 
                 $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
@@ -157,7 +157,7 @@ class AuthService extends BaseService
             $otp = new OTP();
             $otp->user_id = $user->id;
             // $otp->otp_value = random_int(100000, 999999);
-            $otp->otp_value = '123456';
+            $otp->otp_value = '1234';
             $otp->save();
 
             $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
@@ -208,9 +208,9 @@ class AuthService extends BaseService
                         'access_token' => $token,
                         'token_type' => 'bearer',
                         'expires_in' => $this->guard()->factory()->getTTL() * 60,
-                        'user' => Auth::user()->only('id', 'username', 'email', 'phone_no', 'address', 'experience', 'cv_url', 'image_url', 'total_balance', 'absolute_cv_url', 'absolute_image_url'),
+                        'user' => Auth::user()->only('id', 'name', 'email', 'phone_no','profile_image'),
                         'roles' => $roles,
-                        // 'settings' => Auth::user()->setting->only('user_id', 'private_account', 'secure_payment', 'sync_contact_no', 'app_notification', 'language')
+                        'settings' => Auth::user()->setting->only('user_id', 'private_account', 'secure_payment', 'sync_contact_no', 'app_notification', 'language')
                     ];
                     return Helper::returnRecord(GlobalApiResponseCodeBook::SUCCESS['outcomeCode'], $data);
                 }
@@ -295,7 +295,7 @@ class AuthService extends BaseService
                     $otp = new OTP();
                     $otp->user_id = $user->id;
                     // $otp->otp_value = random_int(100000, 999999);
-                    $otp->otp_value = '123456';
+                    $otp->otp_value = '1234';
                     $otp->save();
         
                     $account_sid = 'AC60d20bdd51da17c92e5dd29c9f22e521';
