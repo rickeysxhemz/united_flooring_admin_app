@@ -53,7 +53,7 @@ Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], 
     });
     Route::prefix('category')->group(function () {
         Route::post('add', [CategoryController::class, 'addCategory']);
-        
+        Route::get('get',[CategoryController::class,'getCategories']);     
     });
     Route::prefix('message')->group(function () {
         Route::post('send', [MessageController::class, 'sendMessage']);
