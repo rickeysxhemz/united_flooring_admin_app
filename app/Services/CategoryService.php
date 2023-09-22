@@ -26,4 +26,17 @@ class CategoryService extends BaseService
         return false;     
              }
         }
+    public function getCategories()
+    {
+        try
+        {
+            $categories=Category::all();
+            return $categories;
+        }catch(Exception $e){
+            DB::rollback();
+            $error = "Error: Category: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("CategoryService: getCategories", $error);
+            return false;     
+        }
     }
+}
