@@ -57,4 +57,18 @@ class ProjectController extends Controller
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Project Update Info did not fetched!", $info));
         return ($this->global_api_response->success(1, "Product Update Info fetched successfully!", $info));
     }
+    public function recentProjects()
+    {
+        $recent_projects = $this->project_service->recentProjects();
+        if (!$recent_projects)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Recent Projects did not fetched!", $recent_projects));
+        return ($this->global_api_response->success(1, "Recent Projects fetched successfully!", $recent_projects));
+    }
+    public function getProjects()
+    {
+        $get_projects = $this->project_service->getProjects();
+        if (!$get_projects)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Projects did not fetched!", $get_projects));
+        return ($this->global_api_response->success(1, "Projects fetched successfully!", $get_projects));
+    }
 }

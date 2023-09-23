@@ -35,6 +35,7 @@ class ProjectService extends BaseService
             $project->Description = $request->Description;
             $project->logo = Helper::storeImageUrl($request,null,'storage/projectImages');
             $project->status = $request->status;
+            $project->ended_at = $request->ended_at;
             $project->save();
             foreach($request->category as $category){
                 $project->ProjectCategories()->attach($category);
@@ -74,6 +75,7 @@ class ProjectService extends BaseService
         $project->Description = $request->Description;
         $project->logo = Helper::storeImageUrl($request,null,'storage/projectImages');
         $project->status = $request->status;
+        $project->ended_at = $request->ended_at;
         $project->save();
         foreach($request->category as $category){
             $project->ProjectCategories()->attach($category);
@@ -183,6 +185,35 @@ class ProjectService extends BaseService
             DB::rollback();
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
             Helper::errorLogs("ProjectService: info", $error);
+            return false;
+        }
+    }
+    public function recentProjects()
+    {
+        try{
+            $projects=Project::with('ProjectCategories','user')
+            ->orderBy('created_at','desc')
+            ->where('status','in_progress')
+            ->get();
+            return $projects;
+        }catch(Exception $e){
+            DB::rollback();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("ProjectService: recentProjects", $error);
+            return false;
+        }
+    }
+    public function getProjects()
+    {
+        try{
+            $projects=Project::with('ProjectCategories','user')
+            ->orderBy('created_at','desc')
+            ->get();
+            return $projects;
+        }catch(Exception $e){
+            DB::rollback();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("ProjectService: getProjects", $error);
             return false;
         }
     }
