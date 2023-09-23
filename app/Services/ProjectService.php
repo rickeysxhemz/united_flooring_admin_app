@@ -35,7 +35,7 @@ class ProjectService extends BaseService
             $project->Description = $request->Description;
             $project->logo = Helper::storeImageUrl($request,null,'storage/projectImages');
             $project->status = $request->status;
-            $project->end_date = $request->end_date;
+            $project->ended_at = $request->ended_at;
             $project->save();
             foreach($request->category as $category){
                 $project->ProjectCategories()->attach($category);
@@ -75,7 +75,7 @@ class ProjectService extends BaseService
         $project->Description = $request->Description;
         $project->logo = Helper::storeImageUrl($request,null,'storage/projectImages');
         $project->status = $request->status;
-        $project->end_date = $request->end_date;
+        $project->ended_at = $request->ended_at;
         $project->save();
         foreach($request->category as $category){
             $project->ProjectCategories()->attach($category);
