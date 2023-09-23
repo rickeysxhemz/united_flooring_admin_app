@@ -28,7 +28,7 @@ class CheckUserStatus
                     "numOfRecords" => 1,
                     "message" => "Complete your profile!"
                 ],
-                'records' => Auth::user()->only('id', 'username', 'email', 'phone_no', 'address', 'experience', 'cv_url', 'image_url', 'total_balance', 'absolute_cv_url', 'absolute_image_url'),
+                'records' => Auth::user()->only('id', 'name', 'email', 'phone_no', 'profile_image'),
                 'errors' => [],
             ]);
 
