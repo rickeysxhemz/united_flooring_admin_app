@@ -25,7 +25,7 @@ class SettingController extends Controller
     {
         $change_password = $this->setting_service->changePassword($request);
         if (!$change_password)
-            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Password did not changed!", $change_password));
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INVALID_FORM_INPUTS, "Password did not match with old password!", $change_password));
         return ($this->global_api_response->success(1, "Password changed successfully!", $change_password));
     }
     public function profileImage(Request $request)

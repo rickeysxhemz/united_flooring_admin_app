@@ -16,7 +16,7 @@ class ProjectController extends Controller
         $this->project_service = $ProjectService;
         $this->global_api_response = $GlobalApiResponse;
     }
-    public function addProject(Request $request){
+    public function addProject(AddProjectRequest $request){
         $add_project = $this->project_service->addProject($request);
         if (!$add_project)
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Project did not added!", $add_project));

@@ -51,6 +51,7 @@ class MessageService extends BaseService
     {
         try
         {
+            $authUserId = auth()->user()->id;
             $userPairs = Message::selectRaw('DISTINCT LEAST(sender_id, receiver_id) as user1, GREATEST(sender_id, receiver_id) as user2')
             ->get();
             $chats = [];
@@ -58,12 +59,14 @@ class MessageService extends BaseService
             $sender = User::find($userPair->user1);
             $receiver = User::find($userPair->user2);
             if ($sender && $receiver) {
+                if ($userPair->user1 === $authUserId || $userPair->user2 === $authUserId) {
                 $chats[] = [
                     'sender_id' => $userPair->user1,
                     'receiver_id' => $userPair->user2,
                     'sender' => $sender,
                     'receiver' => $receiver,
                 ];
+            }
             }
             }
             return Helper::returnRecord(GlobalApiResponseCodeBook::RECORDS_FOUND['outcomeCode'], $chats);
