@@ -38,9 +38,10 @@ class ProjectService extends BaseService
             $project->started_at = $request->started_at;
             $project->ended_at = $request->ended_at;
             $project->save();
-            foreach($request->category as $category){
-                $project->ProjectCategories()->attach($category);
-            }
+            $project->ProjectCategories()->attach($request->category);
+            // foreach($request->category as $category){
+            //     $project->ProjectCategories()->attach($category);
+            // }
             DB::commit();
             $mail_data = [
                 'email' => $user_exist->email,
@@ -73,15 +74,16 @@ class ProjectService extends BaseService
         $project->user_id = $user->id;
         $project->name = $request->project_name;
         $project->priority = $request->priority;
-        $project->Description = $request->Description;
+        $project->description = $request->Description;
         $project->logo = Helper::storeImageUrl($request,null,'storage/projectImages');
         $project->status = $request->status;
         $project->started_at = $request->started_at;
         $project->ended_at = $request->ended_at;
         $project->save();
-        foreach($request->category as $category){
-            $project->ProjectCategories()->attach($category);
-        }
+        $project->ProjectCategories()->attach($request->category);
+        // foreach($request->category as $category){
+        //     $project->ProjectCategories()->attach($category);
+        // }
         DB::commit();
         $mail_data = [
             'email' => $user->email,
@@ -130,7 +132,7 @@ class ProjectService extends BaseService
            
                     DB::beginTransaction();
                     $comment = new Comment();
-                    $comment->sender_id = $request->sender_id;
+                    $comment->sender_id = auth()->user()->id;
                     $comment->receiver_id = $request->receiver_id;
                     $comment->project_id = $request->project_id;
                     $comment->comment = $request->comment;

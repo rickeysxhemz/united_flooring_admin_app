@@ -24,7 +24,7 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
-                "sender_id" => "required|exists:users,id",
+                // "sender_id" => "required|exists:users,id",
                 "receiver_id" => "required|exists:users,id",
                 "project_id" => "required|exists:projects,id",
                 "comment" => "required|string",    

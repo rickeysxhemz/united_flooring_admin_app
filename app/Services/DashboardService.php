@@ -14,7 +14,9 @@ class DashboardService extends BaseService
         try{
             $user_data=[];
             $user=auth()->user();
-            $PreeningProjectsCount = $user->projects->where('status','in_progress')->count();
+            $PreeningProjectsCount = Project::where('admin_id', auth()->user()->id)
+            ->where('status', 'in_progress')
+            ->count();
             $user_data['PreeningProjectsCount']=$PreeningProjectsCount;
             $user_data['user']=$user;
             return $user_data;
@@ -28,7 +30,8 @@ class DashboardService extends BaseService
     public function recentProjects()
     {
         try{
-            $recent_projects=Project::with('ProjectCategories','user')
+            $recent_projects=Project::where('admin_id', auth()->user()->id)
+                            ->with('ProjectCategories','user')
                             ->where('status','in_progress')
                             ->latest('created_at')
                             ->get();

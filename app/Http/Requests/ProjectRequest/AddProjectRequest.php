@@ -32,7 +32,10 @@ class AddProjectRequest extends FormRequest
             'priority'=>'required|in:low,medium,high',
             'image_url'=>'required|image',
             'status'=>'required|in:in_progress,completed,cancel',
-            'category'=>'required|array',
+            'category'=>"required|exists:categories,id",
+            'started_at'=>'required|date',
+            'ended_at'=>'required|date',            
+
         ];
     }
 }

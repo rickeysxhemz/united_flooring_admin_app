@@ -35,10 +35,14 @@ class SettingService extends BaseService{
     }
     public function changePassword($request){
         try{
-            $user=auth()->user();
-            if(isset($request->password))
+            if(!Hash::check($request->old_password,auth()->user()->password))
             {
-            $user->password=Hash::make($request->password);
+                return false;
+            }
+            $user=auth()->user();
+            if(isset($request->new_password))
+            {
+            $user->password=Hash::make($request->new_password);
             }
             $user->save();
             return true;
