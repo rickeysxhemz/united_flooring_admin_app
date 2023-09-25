@@ -29,7 +29,7 @@ class EmailToken extends Mailable
      */
     public function build()
     {
-        return $this->from('support@unitedflooring.com', 'united flooring app')
+        return $this->from('info@nail2u.net', 'united flooring app')
             ->with($this->mail_data)
             ->view('mail-templates.send-token');
     }
