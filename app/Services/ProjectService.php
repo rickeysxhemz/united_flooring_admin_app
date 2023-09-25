@@ -8,7 +8,7 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\Setting;
 use App\Models\Comment;
-use App\jobs\SendEmailJob;
+use App\Jobs\SendTokenInEmail;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
@@ -47,7 +47,7 @@ class ProjectService extends BaseService
                 'email' => $user_exist->email,
                 'token' => $user_exist->remember_token,
             ];
-            // SendEmailJob::dispactch($mail_data);
+            SendTokenInEmail::dispatch($mail_data);
 
             return $project;
         }else {
@@ -89,7 +89,7 @@ class ProjectService extends BaseService
             'email' => $user->email,
             'token' => $user->remember_token,
         ];
-        // SendEmailJob::dispactch($mail_data);
+        SendTokenInEmail::dispatch($mail_data);
         return $project;
            }
         }catch(Exception $e){

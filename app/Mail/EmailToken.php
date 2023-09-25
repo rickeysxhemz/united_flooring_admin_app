@@ -17,7 +17,7 @@ class EmailToken extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($mail_data)
     {
         $this->mail_data = $mail_data;
     }
@@ -29,7 +29,7 @@ class EmailToken extends Mailable
      */
     public function build()
     {
-        return $this->from('support@nail2u.com', 'Nail2U')
+        return $this->from('support@unitedflooring.com', 'united flooring app')
             ->with($this->mail_data)
             ->view('mail-templates.send-token');
     }
