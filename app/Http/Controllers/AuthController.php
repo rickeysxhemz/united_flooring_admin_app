@@ -23,13 +23,17 @@ class AuthController extends Controller
     
     public function register(RegisterRequest $request)
     {
-        $register = $this->auth_service->register($request);
+        $register = $this->auth_service->register($request);        
+
+        if (!$register)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User did not registered!", $register));
+        
+        if ($register['outcomeCode'] === GlobalApiResponseCodeBook::INVALID_FORM_INPUTS['outcomeCode'])
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INVALID_FORM_INPUTS, "The Phone has been not verified.", $register['record']));
         
         if ($register['outcomeCode'] === GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS['outcomeCode'])
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS, "Record Already Exist!", $register['record']));
-        if (!$register)
-            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User did not registered!", $register));
-
+        
         return ($this->global_api_response->success(1, "User registered successfully!", $register));
     }
 
