@@ -52,23 +52,12 @@ class MessageService extends BaseService
         try
         {
             $authUserId = auth()->user()->id;
-            $userPairs = Message::selectRaw('DISTINCT LEAST(sender_id, receiver_id) as user1, GREATEST(sender_id, receiver_id) as user2')
-            ->get();
-            $chats = [];
-            foreach ($userPairs as $userPair) {
-            $sender = User::find($userPair->user1);
-            $receiver = User::find($userPair->user2);
-            if ($sender && $receiver) {
-                if ($userPair->user1 === $authUserId || $userPair->user2 === $authUserId) {
-                $chats[] = [
-                    'sender_id' => $userPair->user1,
-                    'receiver_id' => $userPair->user2,
-                    'sender' => $sender,
-                    'receiver' => $receiver,
-                ];
-            }
-            }
-            }
+            $chats = Message::with(['sender', 'receiver'])
+                ->where(function ($query) use ($authUserId) {
+                    $query->where('sender_id', $authUserId)
+                          ->orWhere('receiver_id', $authUserId);
+                })
+                ->get();
             return Helper::returnRecord(GlobalApiResponseCodeBook::RECORDS_FOUND['outcomeCode'], $chats);
         }catch(Exception $e){
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
