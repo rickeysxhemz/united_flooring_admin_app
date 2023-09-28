@@ -195,7 +195,7 @@ class AuthService extends BaseService
                     $data = [
                         'access_token' => $token,
                         'token_type' => 'bearer',
-                        'expires_in' => $this->guard()->factory()->getTTL() * 60,
+                        'expires_in' => $this->guard()->factory()->getTTL() * 60 * 24 * 30,
                         'user' => Auth::user()->only('id', 'name', 'email', 'phone_no','profile_image'),
                         'roles' => $roles,
                         'settings' => Auth::user()->setting->only('user_id', 'private_account', 'secure_payment', 'sync_contact_no', 'app_notification', 'language')
