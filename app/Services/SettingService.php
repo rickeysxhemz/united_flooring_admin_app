@@ -22,7 +22,7 @@ class SettingService extends BaseService{
             }
             if(isset($request->phone))
             {
-                $user->phone=$request->phone;
+                $user->phone_no=$request->phone;
             }
             $user->save();
             return $user;
