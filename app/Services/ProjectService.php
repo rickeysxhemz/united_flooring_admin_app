@@ -16,7 +16,8 @@ use Exception;
 use App\Helper\Helper;
 use App\Models\ProjectImage;
 use App\Http\Traits\CommonTrait;
-
+use App\Models\Message;
+use App\Models\Conversation;
 class ProjectService extends BaseService
 {
     use CommonTrait;
@@ -79,6 +80,29 @@ class ProjectService extends BaseService
         $project->ended_at = $request->ended_at;
         $project->save();
         $project->ProjectCategories()->attach($request->category);
+        if($project)
+        {
+        $conversation=new Conversation();
+        $conversation->admin_id=auth()->user()->id;
+        $conversation->user_id=$user->id;
+        $conversation->message='hello,Your Project is created successfully';
+        $conversation->save();
+        $message=new Message();
+        $message->conversation_id=$conversation->id;
+        $message->sender_id=auth()->user()->id;
+        $message->receiver_id=$user->id;
+        $message->message=$conversation->message;
+        $message->save();
+        $title='new message';
+        $body=auth()->user()->name.' send a message';
+        $data=[
+            'status'=>'chat',
+            'sender'=>auth()->user()->id,
+            'receiver'=>$user->id,
+            'message'=>$conversation->message
+        ];
+        $this->pusher($user->id,$title,$body,$data);
+        }
         DB::commit();
         $mail_data = [
             'email' => $user->email,
