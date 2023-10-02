@@ -24,7 +24,7 @@ class VerifyCodeRequest extends FormRequest
     public function rules()
     {
         return [
-            "email" => "bail|email|max:255|exists:users,email",
+            "phone_number"=>"required|numeric",
             "code" => "required|max:6"
         ];
     }

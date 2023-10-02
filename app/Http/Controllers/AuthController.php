@@ -70,7 +70,7 @@ class AuthController extends Controller
         $verify_code = $this->auth_service->verifyCode($request);
 
         if (!$verify_code)
-            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "otp code not verified", $verify_code));
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INVALID_FORM_INPUTS, "otp code not verified", $verify_code));
 
         return ($this->global_api_response->success(1, "code verify successfully!", $verify_code));
     }

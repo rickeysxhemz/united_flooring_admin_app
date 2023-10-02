@@ -270,35 +270,6 @@ class AuthService extends BaseService
         }
     }
 
-    public function verifyPhone($request)
-    {
-        try {
-
-            $error = [];
-
-            $user = User::where('phone_no', $request->phone_no)->first();
-            
-            if($user && $user->phone_verified_at !== null){
-                $model_has_roles = DB::table('model_has_roles')
-                ->where('model_id', $user->id)->first();
-                
-                if($model_has_roles && $model_has_roles->role_id == '3') {
-                    return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS['outcomeCode'], ['The phone number has already been taken as artist']);
-                } else {
-                    return Helper::returnRecord(GlobalApiResponseCodeBook::RECORD_ALREADY_EXISTS['outcomeCode'], ['The phone number has already been taken']);
-                }
-            } else {
-                return Helper::returnRecord(GlobalApiResponseCodeBook::SUCCESS['outcomeCode'], '');
-            }
-
-        } catch (Exception $e) {
-            DB::rollBack();
-            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
-            Helper::errorLogs("AuthService: verifyPhone", $error);
-            return false;
-        }
-    }
-
      public function verifyCode($request)
     {
         try {
@@ -310,15 +281,16 @@ class AuthService extends BaseService
             {
                 $user = User::where('phone_no', $request->phone_number)->first();
             }
-            
             $otp = OTP::where('user_id', $user->id)->where('otp_value', $request->code)->first();
-            if($otp && $request->has('register_otp') && isset($request->register_otp)){
-                $user->phone_verified_at = now();
-                $user->save();
-                OTP::where('user_id', $user->id)->latest()->delete();
-            }
+            // if($otp && $request->has('register_otp') && isset($request->register_otp)){
+            //     $user->phone_verified_at = now();
+            //     $user->save();
+            //     OTP::where('user_id', $user->id)->latest()->delete();
+            // }
             // return $otp;
-            return true;
+            if($otp)
+                return true;
+            return false;
         } catch (Exception $e) {
             DB::rollBack();
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
