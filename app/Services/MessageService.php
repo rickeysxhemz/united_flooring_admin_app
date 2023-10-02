@@ -28,7 +28,7 @@ class MessageService extends BaseService
                 $exists = Conversation::find($conversation_exists->id);
                 
                 $exists->message=$request->message;
-                $exits->read=false;
+                $exists->read=false;
                 $exists->save();
                 $message = new Message();
                 $message->conversation_id = $exists->id;
@@ -94,6 +94,7 @@ class MessageService extends BaseService
         {
             $chats = Conversation::with('user')
             ->where('admin_id',Auth::id())
+            ->orderBy('created_at','desc')
             ->get();
             return Helper::returnRecord(GlobalApiResponseCodeBook::RECORDS_FOUND['outcomeCode'], $chats);
         }catch(Exception $e){
@@ -107,13 +108,10 @@ class MessageService extends BaseService
     {
         try
         {
-            $messages = Message::where(function ($query) use ($request) {
-                $query->where('sender_id', $request->sender_id)
-                    ->where('receiver_id', $request->receiver_id);
-            })->orWhere(function ($query) use ($request) {
-                $query->where('sender_id', $request->receiver_id)
-                    ->where('receiver_id', $request->sender_id);
-            })->get();
+            $messages = Message::with('sender','receiver')
+            ->where('conversation_id',$request->conversation_id)
+            ->orderBy('created_at','desc')
+            ->get();
             return Helper::returnRecord(GlobalApiResponseCodeBook::RECORDS_FOUND['outcomeCode'], $messages);
         }catch(Exception $e){
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
