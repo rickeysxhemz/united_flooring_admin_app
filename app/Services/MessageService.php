@@ -120,12 +120,13 @@ class MessageService extends BaseService
             
         }
     }
-    public function read()
+    public function read($request)
     {
         try
         {   
             DB::beginTransaction();
-            $read_msg = Conversation::where('admin_id',Auth::id())->first();
+            $read_msg = Conversation::where('admin_id',Auth::id())
+                        ->where('user_id',$request->user_id)->first();
             $read_msg->read = true;
             $read_msg->save();
             DB::commit();

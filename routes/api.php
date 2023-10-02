@@ -61,7 +61,7 @@ Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], 
         Route::post('send', [MessageController::class, 'sendMessage']);
         Route::get('get-chats',[MessageController::class,'getChats']);
         Route::post('get-messages',[MessageController::class,'getMessages']);
-        Route::get('read',[MessageController::class,'read']);
+        Route::post('read',[MessageController::class,'read']);
         
     });
     Route::prefix('setting')->group(function () {

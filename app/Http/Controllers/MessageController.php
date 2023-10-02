@@ -8,6 +8,7 @@ use App\Libs\Response\GlobalApiResponseCodeBook;
 use App\Services\MessageService;
 use App\Http\Requests\MessageRequest\MessageRequest;
 use App\Http\Requests\MessageRequest\ChatRequest;
+use App\Http\Requests\MessageRequest\ReadRequest;
 
 class MessageController extends Controller
 {
@@ -36,9 +37,9 @@ class MessageController extends Controller
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Messages did not fetched!", $get_messages));
         return ($this->global_api_response->success(1, "Messages fetched successfully!", $get_messages));
     }
-    public function read()
+    public function read(ReadRequest $request)
     {   
-        $read = $this->message_service->read();
+        $read = $this->message_service->read($request);
         if (!$read)
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Messages did not read!", $read));
         return ($this->global_api_response->success(1, "Messages read successfully!", $read));
