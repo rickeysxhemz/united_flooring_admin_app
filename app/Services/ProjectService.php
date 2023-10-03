@@ -86,6 +86,8 @@ class ProjectService extends BaseService
         $conversation->admin_id=auth()->user()->id;
         $conversation->user_id=$user->id;
         $conversation->message='hello,Your Project is created successfully';
+        $conversation->read=false;
+        $conversation->unread_messages_count=1;
         $conversation->save();
         $message=new Message();
         $message->conversation_id=$conversation->id;
@@ -98,10 +100,10 @@ class ProjectService extends BaseService
         $data=[
             'status'=>'chat',
             'sender'=>auth()->user()->id,
-            'receiver'=>$user->id,
+            'receiver'=>$user->id, 
             'message'=>$conversation->message
         ];
-        $this->pusher($user->id,$title,$body,$data);
+        $this->pusher($title,$body,$data);
         }
         DB::commit();
         $mail_data = [
