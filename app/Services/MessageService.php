@@ -26,9 +26,9 @@ class MessageService extends BaseService
             
             if($conversation_exists){
                 $exists = Conversation::find($conversation_exists->id);
-                
                 $exists->message=$request->message;
                 $exists->read=false;
+                $exists->unread_messages_count=$exists->unread_messages_count+1;
                 $exists->save();
                 $message = new Message();
                 $message->conversation_id = $exists->id;
@@ -57,6 +57,8 @@ class MessageService extends BaseService
             $conversation->admin_id=Auth::id();
             $conversation->user_id=$request->receiver_id;
             $conversation->message=$request->message;
+            $conversation->read=false;
+            $conversation->unread_messages_count=1;
             $conversation->save();
 
             $message = new Message();
@@ -92,10 +94,14 @@ class MessageService extends BaseService
     {
         try
         {
-            $chats = Conversation::with('user')
+            $chats=[];
+            $UnReadChats=Conversation::where('read', false)->count();
+            $all_chats = Conversation::with('user')
             ->where('admin_id',Auth::id())
             ->orderBy('created_at','desc')
             ->get();
+            $chats['unread_chats']=$UnReadChats;
+            $chats['all_chats']=$all_chats;
             return Helper::returnRecord(GlobalApiResponseCodeBook::RECORDS_FOUND['outcomeCode'], $chats);
         }catch(Exception $e){
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
@@ -128,6 +134,7 @@ class MessageService extends BaseService
             $read_msg = Conversation::where('admin_id',Auth::id())
                         ->where('user_id',$request->user_id)->first();
             $read_msg->read = true;
+            $read_msg->unread_messages_count = 0;
             $read_msg->save();
             DB::commit();
             return Helper::returnRecord(GlobalApiResponseCodeBook::RECORDS_FOUND['outcomeCode'], $read_msg);
