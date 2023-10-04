@@ -211,7 +211,10 @@ class ProjectService extends BaseService
     public function info($request)
     {
         try{
-            $project=Project::with('ProjectCategories','user','projectImages','comments')
+            $project=Project::with(['ProjectCategories','user','projectImages','comments'=>(function($query){
+                $query->with('sender')
+                ->orderBy('created_at','desc');
+            })])
             ->where('id',$request->project_id)
             ->first();
             return $project;
