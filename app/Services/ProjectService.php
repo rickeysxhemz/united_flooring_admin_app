@@ -154,7 +154,7 @@ class ProjectService extends BaseService
                     DB::beginTransaction();
                     $comment = new Comment();
                     $comment->sender_id = auth()->user()->id;
-                    $comment->receiver_id = $request->receiver_id;
+                    // $comment->receiver_id = $request->receiver_id;
                     $comment->project_id = $request->project_id;
                     $comment->comment = $request->comment;
                     $comment->save();
@@ -165,10 +165,9 @@ class ProjectService extends BaseService
                             'status'=>'comment',
                             'sender'=>auth()->user()->id,
                             'receiver'=>$request->receiver_id,
-                            'project_id'=>$request->project_id,
                             'comment'=>$request->comment
                         ];
-                        $this->pusher($request->receiver_id,$title,$body,$data);
+                        $this->pusher(auth()->user()->id,$title,$body,$data);
                     return $comment;
         }catch(Exception $e){
             DB::rollback();
