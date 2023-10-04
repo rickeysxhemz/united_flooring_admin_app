@@ -25,7 +25,7 @@ class CommentRequest extends FormRequest
     {
         return [
                 // "sender_id" => "required|exists:users,id",
-                "receiver_id" => "required|exists:users,id",
+                // "receiver_id" => "required|exists:users,id",
                 "project_id" => "required|exists:projects,id",
                 "comment" => "required|string",    
         ];
