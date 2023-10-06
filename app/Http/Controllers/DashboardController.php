@@ -28,4 +28,11 @@ class DashboardController extends Controller
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Recent projects did not fetched!", $recent_projects));
         return ($this->global_api_response->success(1, "Recent projects fetched successfully!", $recent_projects));
     }
+    public function userDeviceToken(Request $request)
+    {
+        $user_device_token = $this->dashboard_service->userDeviceToken($request);
+        if (!$user_device_token)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User device token did not fetched!", $user_device_token));
+        return ($this->global_api_response->success(1, "User device token fetched successfully!", $user_device_token));
+    }
 }
