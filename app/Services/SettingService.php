@@ -69,5 +69,18 @@ class SettingService extends BaseService{
             return false;
         }
     }
-
+    public function deleteUser(){
+        try{
+            DB::beginTransaction();
+            $user=auth()->user();
+            $user->delete();
+            DB::commit();
+            return $user;
+        }catch(Exception $e){
+            DB::rollback();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("SettingService: softDeleteUser", $error);
+            return false;
+        }
+    }
 }

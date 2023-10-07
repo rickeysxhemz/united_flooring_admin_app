@@ -69,6 +69,7 @@ Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], 
         Route::post('edit-profile', [SettingController::class, 'editProfile']);
         Route::post('change-password', [SettingController::class, 'changePassword']);
         Route::post('profile-image', [SettingController::class, 'profileImage']);
+        Route::get('delete-user',[SettingController::class,'deleteUser']);
     });
         
 });
