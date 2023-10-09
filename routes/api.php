@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], 
     Route::prefix('dashboard')->group(function () {
         Route::get('user-data',[DashboardController::class,'getUserData']);
         Route::get('recent-projects',[DashboardController::class,'recentProjects']);
+        Route::post('user-device-token',[DashboardController::class,'userDeviceToken']);
         });
 
     Route::prefix('project')->group(function () {
@@ -68,6 +69,7 @@ Route::group(['middleware' => ['auth:api', 'role:admin', 'check-user-status']], 
         Route::post('edit-profile', [SettingController::class, 'editProfile']);
         Route::post('change-password', [SettingController::class, 'changePassword']);
         Route::post('profile-image', [SettingController::class, 'profileImage']);
+        Route::get('delete-user',[SettingController::class,'deleteUser']);
     });
         
 });

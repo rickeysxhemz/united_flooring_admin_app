@@ -35,4 +35,11 @@ class SettingController extends Controller
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Profile image did not uploaded!", $profile_image));
         return ($this->global_api_response->success(1, "Profile image uploaded successfully!", $profile_image));
     }
+    public function deleteUser()
+    {
+        $delete_user = $this->setting_service->deleteUser();
+        if (!$delete_user)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "User did not deleted!", $delete_user));
+        return ($this->global_api_response->success(1, "User deleted successfully!", $delete_user));
+    }
 }

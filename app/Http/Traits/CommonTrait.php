@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Exception;
 use Pusher;
 use App\Helper\Helper;
+use App\Models\User;
 
 trait CommonTrait {
 
@@ -241,6 +242,67 @@ trait CommonTrait {
 
         return isset($_config[0][$item]) ? $_config[0][$item] : NULL;
     }
+    function notifications($id,$user, $title = '', $body = '', $data = []) 
+    {
+        try {
+            $url = 'https://fcm.googleapis.com/fcm/send';
+            
+            if($user == 'user'){
+                $FcmToken = User::where('id', $id)->pluck('device_token')->all();
+                $serverKey = '';
+                
+            } else {
+                $FcmToken = User::where('id', $id)->pluck('device_token')->all();
+                $serverKey = 'AAAA6Vu72G4:APA91bEFdMWka9hBxaqQnyikMmV2FnlCvsQTIs0rAAi8bTazMiAr_bD6x_UwDTb8wNNjUjWrWZjK7ZpsMmYf6OFp2_YgBXR1yQATWpewNjo2ctIZpptjmggDmZjGNOHCbcAjgNZ6nFZC';
+            }
+            $data = [
+                "registration_ids" => $FcmToken,
+                "data" => [
+                    "data" => $data,
+                ],
+                "notification" => [
+                    "title" => $title,
+                    "body" => $body
+                ]
+            ];
+            $encodedData = json_encode($data);
+        
+            $headers = [
+                'Authorization:key=' . $serverKey,
+                'Content-Type: application/json',
+            ];
+        
+            $ch = curl_init();
+        
+            curl_setopt($ch, CURLOPT_URL, $url);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+            // Disabling SSL Certificate support temporarly
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);        
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
+
+            // Execute post
+            $result = curl_exec($ch);
+
+            if ($result === FALSE) {
+                die('Curl failed: ' . curl_error($ch));
+            }        
+
+            // Close connection
+            curl_close($ch);
+            
+        }catch (Exception $e) {
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("CommonTrait: Notification", $error);
+            return Helper::returnRecord(false, []);
+        }
+        
+    }
+
+
     function pusher($trigger_user, $trigger_message, $data) 
     {
         try {

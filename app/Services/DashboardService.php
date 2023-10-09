@@ -5,6 +5,8 @@ use App\Libs\Response\GlobalApiResponseCodeBook;
 use App\Libs\Response\GlobalApiResponse;
 use App\Helper\Helper;
 use App\Models\Project;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 
 class DashboardService extends BaseService
@@ -40,6 +42,22 @@ class DashboardService extends BaseService
             DB::rollback();
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
             Helper::errorLogs("ProjectService: getProjects", $error);
+            return false;
+        }
+    }
+    public function userDeviceToken($request)
+    {
+        try{
+            DB::beginTransaction();
+            $user=auth()->user();
+            $user->device_token=$request->device_token;
+            $user->save();
+            DB::commit();
+            return $user;
+        }catch(Exception $e){
+            DB::rollback();
+            $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
+            Helper::errorLogs("DashboardService: userDeviceToken", $error);
             return false;
         }
     }
