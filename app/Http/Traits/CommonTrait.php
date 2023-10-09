@@ -249,7 +249,7 @@ trait CommonTrait {
             
             if($user == 'user'){
                 $FcmToken = User::where('id', $id)->pluck('device_token')->all();
-                $serverKey = '';
+                $serverKey = 'AAAAXE18w68:APA91bHktIgr00yxKIKGITzgFt0ScHVF5ZfICyXeisfqej-F52wfFbcDAhT_Ie5Ff-jIiuwi-7quduln_VqFBJkosMp1ygM3Hhm8T_ld8S7NrbOQ-9u7S2QJ_dZcwa1xh96AmRKjFKpH';
                 
             } else {
                 $FcmToken = User::where('id', $id)->pluck('device_token')->all();
