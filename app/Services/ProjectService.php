@@ -263,7 +263,7 @@ class ProjectService extends BaseService
     public function getProjects()
     {
         try{
-            $projects=Project::with('ProjectCategories','user')
+            $projects=Project::with('ProjectCommentsCount','ProjectCategories','user')
             ->orderBy('created_at','desc')
             ->get();
             return $projects;

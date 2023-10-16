@@ -24,4 +24,8 @@ class Project extends Model
     {
         return $this->hasMany(Comment::class,'project_id','id');
     }
+    public function ProjectCommentsCount()
+    {
+        return $this->hasOne(ProjectComment::class,'project_id','id');
+    }
 }
