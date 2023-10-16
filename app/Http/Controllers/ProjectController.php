@@ -71,4 +71,11 @@ class ProjectController extends Controller
             return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Projects did not fetched!", $get_projects));
         return ($this->global_api_response->success(1, "Projects fetched successfully!", $get_projects));
     }
+    public function readComment(Request $request)
+    {
+        $read_comment = $this->project_service->readComment($request);
+        if (!$read_comment)
+            return ($this->global_api_response->error(GlobalApiResponseCodeBook::INTERNAL_SERVER_ERROR, "Comment did not read!", $read_comment));
+        return ($this->global_api_response->success(1, "Comment read successfully!", $read_comment));
+    }
 }
