@@ -282,15 +282,15 @@ class AuthService extends BaseService
                 $user = User::where('phone_no', $request->phone_number)->first();
             }
             $otp = OTP::where('user_id', $user->id)->where('otp_value', $request->code)->first();
-            // if($otp && $request->has('register_otp') && isset($request->register_otp)){
-            //     $user->phone_verified_at = now();
-            //     $user->save();
-            //     OTP::where('user_id', $user->id)->latest()->delete();
-            // }
-            // return $otp;
-            if($otp)
+            if($otp && $request->has('code') && isset($request->code)){
+                
+                $user->phone_verified_at = now();
+                $user->save();
+                OTP::where('user_id', $user->id)->latest()->delete();
                 return true;
-            return false;
+            }
+            
+        return false;
         } catch (Exception $e) {
             DB::rollBack();
             $error = "Error: Message: " . $e->getMessage() . " File: " . $e->getFile() . " Line #: " . $e->getLine();
